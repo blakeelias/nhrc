@@ -68,35 +68,9 @@
 
     <script>
         // Get the context of the canvas element we want to select
-        var ctx = document.getElementById("myChart").getContext("2d");
+        
 
-        var data = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [
-                {
-                    label: "Reported",
-                    fillColor: "rgba(220,220,220,0.2)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-                {
-                    label: "Resolved",
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(151,187,205,1)",
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }
-            ]
-        };
-
-        var myNewChart = new Chart(ctx).Line(data);
+        
 
         function numDateIsIn(data, startDate, endDate, colNum) {
             var n = 0;
@@ -131,18 +105,65 @@
             return numInInterval;
         }
 
+        lineData = {
+                        labels: ["January", "February", "March", "April", "May", "June", "July"],
+                        datasets: [
+                            {
+                                label: "Reported",
+                                fillColor: "rgba(255,0,0,0.2)",
+                                strokeColor: "rgba(255,0,0,1)",
+                                pointColor: "rgba(255,0,0,1)",
+                                pointStrokeColor: "#fff",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(255,0,0,1)",
+                                data: [65, 59, 80, 81, 56, 55, 40]
+                            },
+                            {
+                                label: "Acknowledged",
+                                fillColor: "rgba(0,0,255,0.2)",
+                                strokeColor: "rgba(0,0,255,1)",
+                                pointColor: "rgba(0,0,255,1)",
+                                pointStrokeColor: "#fff",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(0,0,255,1)",
+                                data: [28, 48, 40, 19, 86, 27, 90]
+                            },
+                            {
+                                label: "Closed",
+                                fillColor: "rgba(0,255,0,0.2)",
+                                strokeColor: "rgba(0,255,0,1)",
+                                pointColor: "rgba(0,255,0,1)",
+                                pointStrokeColor: "#fff",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(0,255,0,1)",
+                                data: [28, 48, 40, 19, 86, 27, 90]
+                            },
+                        ],
+                    };
+
         $(document).ready(function() {
             $.ajax({
                 type: "GET",
                 url: "scf_data.csv",
                 dataType: "text",
                 success: function(data) {
+                    ctx = document.getElementById("myChart").getContext("2d");
+                    
                     parsedData = $.csv.toArrays(data);
                     console.log(parsedData);
-                    console.log(splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 7));
+                    
+                    lineData.datasets[0].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 7);
+                    lineData.datasets[1].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 8);
+                    lineData.datasets[2].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 9);
+
+                    var myNewChart = new Chart(ctx).Line(lineData, {
+                        bezierCurve: false
+                    });
                 }
              });
         });
+
+
         
     </script>
   </body>
