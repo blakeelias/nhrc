@@ -63,6 +63,7 @@
     <script src='js/d3.min.js'></script>
     <script src='js/d3.legend.js'></script>
     <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+    <script src='js/jquery.csv-0.71.min.js'></script>
 <!--    <script src='js/environ.js'></script> -->
 
     <script>
@@ -73,7 +74,7 @@
             labels: ["January", "February", "March", "April", "May", "June", "July"],
             datasets: [
                 {
-                    label: "My First dataset",
+                    label: "Reported",
                     fillColor: "rgba(220,220,220,0.2)",
                     strokeColor: "rgba(220,220,220,1)",
                     pointColor: "rgba(220,220,220,1)",
@@ -83,7 +84,7 @@
                     data: [65, 59, 80, 81, 56, 55, 40]
                 },
                 {
-                    label: "My Second dataset",
+                    label: "Resolved",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -96,6 +97,47 @@
         };
 
         var myNewChart = new Chart(ctx).Line(data);
+
+        function numDateIsIn(data, startDate, endDate, colNum) {
+            var n = 0;
+            for (i in data) {
+                var row = data[i];
+                var date = moment(row[colNum]);
+                console.log(date._d);
+                if (date <= endDate && date >= startDate) {
+                    n += 1;
+                }
+            }
+            return n;
+        }
+
+        function splitByInterval(data, startDate, endDate, intervalNum, intervalStr, colNum) {
+            var nextStartMoment = moment(startDate);
+            var endMoment = moment(endDate);
+            var numInInterval = [];
+            while (nextStartMoment < endMoment) {
+                var intervalStartDate = nextStartMoment._d;
+                var intervalEndDate = nextStartMoment.add(intervalNum, intervalStr)._d;
+                numInInterval.push(numDateIsIn(data, intervalStartDate, intervalEndDate, colNum));
+                console.log('iteration');
+                nextStartMoment = moment(intervalEndDate);
+            }
+            return numInInterval;
+        }
+
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: "scf_data.csv",
+                dataType: "text",
+                success: function(data) {
+                    parsedData = $.csv.toArrays(data);
+                    console.log(parsedData);
+                    console.log(splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 7));
+                }
+             });
+        });
+        
     </script>
   </body>
 </html>
