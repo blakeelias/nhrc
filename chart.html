@@ -77,17 +77,32 @@
             for (i in data) {
                 var row = data[i];
                 var date = moment(row[colNum]);
-                console.log("startDate: " + startDate);
-                console.log("curret date: " + date._d);
-                console.log("endDate: " + endDate);
+                // console.log("startDate: " + startDate);
+                // console.log("curret date: " + date._d);
+                // console.log("endDate: " + endDate);
 
                 if (date <= endDate && date >= startDate) {
                     n += 1;
-                    console.log('in range!!!!!!!!!!!!!!!');
+                    //console.log('in range!!!!!!!!!!!!!!!');
                 }
                 console.log('---');
             }
             return n;
+        }
+
+        function dateIntervals(startDate, endDate, intervalNum, intervalStr) {
+            var intervals = [];
+            console.log('splitByInterval: ' + startDate + ' ; endDate: ' + endDate);
+            var nextStartMoment = moment(startDate);
+            var endMoment = moment(endDate);
+            while (nextStartMoment < endMoment) {
+                var intervalStartDate = nextStartMoment._d;
+                var intervalEndDate = moment(intervalStartDate).add(intervalNum, intervalStr)._d;
+                intervals.push(intervalStartDate);
+                console.log('iteration');
+                nextStartMoment = moment(intervalEndDate);
+            }
+            return intervals;
         }
 
         function splitByInterval(data, startDate, endDate, intervalNum, intervalStr, colNum) {
@@ -144,17 +159,22 @@
         $(document).ready(function() {
             $.ajax({
                 type: "GET",
-                url: "scf_data.csv",
+                url: "data/SCF_2014_NHV_Service_Request_Data_small.csv",
                 dataType: "text",
                 success: function(data) {
+
+                    console.log(data);
+
+
                     ctx = document.getElementById("myChart").getContext("2d");
-                    
+
                     parsedData = $.csv.toArrays(data);
                     console.log(parsedData);
                     
-                    lineData.datasets[0].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 7);
-                    lineData.datasets[1].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 8);
-                    lineData.datasets[2].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 9);
+                    lineData.labels = dateIntervals('2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month');
+                    lineData.datasets[0].data = splitByInterval(parsedData, '2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month', 14);
+                    lineData.datasets[1].data = splitByInterval(parsedData, '2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month', 15);
+                    lineData.datasets[2].data = splitByInterval(parsedData, '2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month', 17);
 
                     var myNewChart = new Chart(ctx).Line(lineData, {
                         bezierCurve: false
