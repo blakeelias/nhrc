@@ -183,7 +183,8 @@
 
 
                     var myNewChart = new Chart(ctx).Line(lineData, {
-                        bezierCurve: false
+                        bezierCurve: false,
+                        multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
                     });
                 }
              });
