@@ -176,10 +176,10 @@
                     lineData.datasets[1].data = splitByInterval(parsedData, '2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month', 15);
                     lineData.datasets[2].data = splitByInterval(parsedData, '2014-01-01T00:00:25-04:00', '2015-01-01T00:00:25-04:00', 1, 'month', 17);*/
 
-                    lineData.labels = dateIntervals('2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes');
-                    lineData.datasets[0].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 7);
-                    lineData.datasets[1].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 9);
-                    lineData.datasets[2].data = splitByInterval(parsedData, '2015-03-28T13:51:17-04:00', '2015-03-28T14:49:25-04:00', 5, 'minutes', 10);
+                    lineData.labels = dateIntervals('2015-03-14T17:14:37-04:00', '2015-03-28T11:45:59-04:00', 1, 'day');
+                    lineData.datasets[0].data = splitByInterval(parsedData, '2015-03-14T17:14:37-04:00', '2015-03-28T11:45:59-04:00', 1, 'day', 7);
+                    lineData.datasets[1].data = splitByInterval(parsedData, '2015-03-14T17:14:37-04:00', '2015-03-28T11:45:59-04:00', 1, 'day', 9);
+                    lineData.datasets[2].data = splitByInterval(parsedData, '2015-03-14T17:14:37-04:00', '2015-03-28T11:45:59-04:00', 1, 'day', 10);
 
 
                     var myNewChart = new Chart(ctx).Line(lineData, {
