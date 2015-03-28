@@ -103,21 +103,27 @@
             for (i in data) {
                 var row = data[i];
                 var date = moment(row[colNum]);
-                console.log(date._d);
+                console.log("startDate: " + startDate);
+                console.log("curret date: " + date._d);
+                console.log("endDate: " + endDate);
+
                 if (date <= endDate && date >= startDate) {
                     n += 1;
+                    console.log('in range!!!!!!!!!!!!!!!');
                 }
+                console.log('---');
             }
             return n;
         }
 
         function splitByInterval(data, startDate, endDate, intervalNum, intervalStr, colNum) {
+            console.log('splitByInterval: ' + startDate + ' ; endDate: ' + endDate);
             var nextStartMoment = moment(startDate);
             var endMoment = moment(endDate);
             var numInInterval = [];
             while (nextStartMoment < endMoment) {
                 var intervalStartDate = nextStartMoment._d;
-                var intervalEndDate = nextStartMoment.add(intervalNum, intervalStr)._d;
+                var intervalEndDate = moment(intervalStartDate).add(intervalNum, intervalStr)._d;
                 numInInterval.push(numDateIsIn(data, intervalStartDate, intervalEndDate, colNum));
                 console.log('iteration');
                 nextStartMoment = moment(intervalEndDate);
